@@ -18,7 +18,8 @@ class ApiClient:
         :param params:
         :param path: путь после / в URL
         """
-        response = requests.get(self.base_url + path.lstrip("/"), params)
+        url = self.base_url + path.lstrip("/")
+        response = requests.get(url, params)
         response.raise_for_status()
         return response
 
