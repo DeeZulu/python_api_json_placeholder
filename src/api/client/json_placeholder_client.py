@@ -88,3 +88,47 @@ class JSONPlaceholderClient:
         :return: Ответ от сервера в виде объекта класса Response
         """
         return self._request("POST", "/posts", json=post_params).json()
+
+    def edit_post(self, post_id: int, post_params: dict) -> Dict[str, Any]:
+        """
+        Редактирование поста (PUT)
+        :param post_id: ID поста
+        :param post_params: Словарь с новыми данными
+        :return: Ответ от сервера в виде объекта класса Response
+        """
+        try:
+            response = self._request("PUT", f"/posts/{post_id}", json=post_params)
+            return response.json()
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 404:
+                raise PostNotFoundError(f"Пост с ID {post_id} не найден") from e
+            raise JSONPlaceholderClientError(f"HTTP Error {e.response.status_code}") from e
+
+    def partial_edit_post(self, post_id: int, post_params: dict) -> Dict[str, Any]:
+        """
+        Частичное редактирование поста (PATCH)
+        :param post_id: ID поста
+        :param post_params: Словарь с новыми данными
+        :return: Ответ от сервера в виде объекта класса Response
+        """
+        try:
+            response = self._request("PATCH", f"/posts/{post_id}", json=post_params)
+            return response.json()
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 404:
+                raise PostNotFoundError(f"Пост с ID {post_id} не найден") from e
+            raise JSONPlaceholderClientError(f"HTTP Error {e.response.status_code}") from e
+
+    def delete_post(self, post_id: int) -> int:
+        """
+        Удаление поста
+        :param post_id: ID поста
+        :return: Ответ от сервера в виде объекта класса Response
+        """
+        try:
+            response = self._request("DELETE", f"/posts/{post_id}")
+            return response.status_code
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 404:
+                raise PostNotFoundError(f"Пост с ID {post_id} не найден") from e
+            raise JSONPlaceholderClientError(f"HTTP Error {e.response.status_code}") from e
