@@ -37,4 +37,4 @@ def test_new_post_can_be_created(client, post_params):
         "userId": post_params["userId"]
     }
     response = client.create_post(params)
-    Post(**json.loads(response.text))
+    Post(**response)

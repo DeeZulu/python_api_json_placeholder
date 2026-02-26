@@ -10,11 +10,13 @@ class JSONPlaceholderClientError(Exception):
 
 class PostNotFoundError(JSONPlaceholderClientError):
     """Пост не найден"""
-    pass
+    def __init__(self, message):
+        self.message = message or "Пост не найден"
 
 class CommentsNotFoundError(JSONPlaceholderClientError):
     """Комментарии не найдены"""
-    pass
+    def __init__(self, message):
+        self.message = message or "Комментарии не найдены"
 
 class JSONPlaceholderClient:
     """Клиент для работы с API https://jsonplaceholder.typicode.com"""
@@ -29,6 +31,7 @@ class JSONPlaceholderClient:
         :param method: Метод запроса
         :param endpoint: Путь внутри API
         :return: Ответ от сервера в виде объекта класса Response
+        :raises JSONPlaceholderClientError: Если проблемы с сетью или сервером
         """
         try:
             url = self.base_url + endpoint.lstrip("/")

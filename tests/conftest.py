@@ -1,6 +1,6 @@
 from pytest import fixture
 
-from src.api.clients.json_placeholder_client import JSONPlaceholderClient
+from src.api.client.json_placeholder_client import JSONPlaceholderClient
 
 
 @fixture(scope="function")
